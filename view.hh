@@ -9,4 +9,5 @@ public:
 
     view();
     virtual ~view();
+
 };
