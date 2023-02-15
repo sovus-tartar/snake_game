@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string.h>
 
+#include "./headers/view_fabric.hh"
+
 int main(int argc, char ** argv)
 {
     if(argc < 2)
@@ -9,18 +11,9 @@ int main(int argc, char ** argv)
         return -1;
     }  
 
-    if(!strcmp(argv[2], "text"))
-    {
-        
-    }
-    else if (!strcmp(argv[2], "gui"))
-    {
+    view * temp = view_fabric::get(argv[1]);
 
-    }
-    else
-    {
-        std::cout << "Wrong arguments, aborting...\n";
-        return -1;
-    }
+    temp->draw();
 
+    delete temp;
 }

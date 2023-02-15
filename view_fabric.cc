@@ -1,12 +1,12 @@
 #include <string.h>
 
-#include "view_fabric.hh"
+#include "./headers/view_fabric.hh"
 
-view* view_fabric::obj_ptr = nullptr;
+view * view_fabric::obj_ptr = nullptr;
 
-view *view_fabric::get(char *mode)
+view * view_fabric::get(char *mode)
 {
-    if(mode == NULL)
+    if(mode == nullptr)
         return obj_ptr;
 
     if (obj_ptr == nullptr)

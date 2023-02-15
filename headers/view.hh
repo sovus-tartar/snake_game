@@ -7,7 +7,8 @@ class view
 public:
     virtual void draw() = 0;
 
-    view();
+    //view();
     virtual ~view();
 
+    static view * get();
 };

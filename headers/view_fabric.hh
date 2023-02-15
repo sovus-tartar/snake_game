@@ -7,5 +7,5 @@ class view_fabric
     static view* obj_ptr;
 
     public:
-        static view* get(char * mode = NULL);
+        static view* get(char * mode = nullptr);
 };
