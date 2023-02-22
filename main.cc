@@ -14,6 +14,6 @@ int main(int argc, char ** argv)
     view * temp = view_fabric::get(argv[1]);
 
     temp->draw();
-
-    delete temp;
+    
+    //delete temp;
 }

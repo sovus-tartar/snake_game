@@ -1,10 +1,16 @@
 #pragma once
 
+struct point
+{
+    public:
+    int x, y;
+};
+
 class view
 {
-    int x, y;
-
 public:
+    int x, y;
+    
     virtual void draw() = 0;
 
     //view();
