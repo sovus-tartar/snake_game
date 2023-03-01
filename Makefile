@@ -1,12 +1,12 @@
 CXX = g++
 CXXFLAGS = -Wall -g -O -std=c++11
-PROJ = hello
+PROJ = snake
 OBJS = main.o controller.o model.o view.o text_view.o view_fabric.o graph_view.o
 HEADERS_PATH = ./headers
 SOURCE_PATH = ./source
 
 
-all: $(PROJ)
+all: $(PROJ) 
 
 $(PROJ): $(OBJS)
 	$(CXX) $(OBJS) -o $(PROJ)	

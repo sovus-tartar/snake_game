@@ -1,15 +1,18 @@
 #include "./headers/text_view.hh"
+#include "./headers/model.hh"
 #include <sys/ioctl.h>
 #include <iostream>
 #include <stdio.h>
 #include <unistd.h>
 #include <cstdlib>
+#include <iterator>
 
-
-//x вниз y вправо
+//x вправо y вниз
 void text_vi::draw()
 {
     std::cout << "Hello, it's text\n";
+    snake S(5, x, y);
+
 
     printf("x = %d y = %d \n", x, y);
     sleep(1);
@@ -20,10 +23,13 @@ void text_vi::draw()
         vline(x, '#');
         hline(1, '#');
         hline(y, '#');
-        usleep(15000);
+
+        const std::list<point*> &temp = S.get_state();
+        draw_list(temp);
+        
+        usleep(500000);
     }
-    // draw frame
-    // while(1)...
+    
 }
 
 void text_vi::clean()
@@ -49,6 +55,13 @@ void text_vi::put_xy(int x, int y, char c)
     putchar(c);
     puts("\e[H");
 }
+void text_vi::put_xy(point p, char c)
+{
+    printf("\e[%d;%dH", p.y, p.x);
+    putchar(c);
+    puts("\e[H");
+}
+
 
 void text_vi::vline(int n, char c)
 {
@@ -81,6 +94,16 @@ text_vi::text_vi()
 
     x = temp.x;
     y = temp.y;
+}
+
+void text_vi::draw_list(const std::list<point*> & list)
+{
+    for(auto it = list.begin(); it != list.end(); ++it)
+    {
+        put_xy(**it, 's');
+    }
+
+    
 }
 
 text_vi::~text_vi()

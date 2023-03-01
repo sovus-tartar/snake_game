@@ -1,4 +1,6 @@
 #include <string.h>
+#include <iostream>
+
 
 #include "./headers/view_fabric.hh"
 
@@ -6,6 +8,8 @@ view * view_fabric::obj_ptr = nullptr;
 
 view * view_fabric::get(char *mode)
 {
+    std::cout << "view_fabric in get\n";
+    
     if(mode == nullptr)
         return obj_ptr;
 
