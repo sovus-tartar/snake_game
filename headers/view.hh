@@ -25,6 +25,6 @@ public:
     virtual void draw() = 0;
 
     //view();
-    virtual ~view();
+    virtual ~view() = 0;
 
 };
