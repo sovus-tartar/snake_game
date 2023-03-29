@@ -3,7 +3,4 @@
 #include <string.h>
 
 
-view::~view()
-{
-    delete this;
-}
+

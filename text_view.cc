@@ -145,7 +145,8 @@ void text_vi::draw_list(const std::list<point *> &list)
     }
 }
 
-text_vi::~text_vi()
+text_vi::~text_vi() 
 {
     tcsetattr(1, TCSANOW, &terminal_state);
+
 }

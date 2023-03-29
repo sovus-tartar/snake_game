@@ -23,8 +23,9 @@ public:
     int x, y;
     
     virtual void draw() = 0;
+    virtual ~view()
+    {
 
-    //view();
-    virtual ~view() = 0;
+    };
 
 };
