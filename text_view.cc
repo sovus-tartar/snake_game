@@ -30,14 +30,13 @@ void text_vi::draw()
     snake S(10, x, y);
     keyboard_ctrl ctrl;
 
-    auto change_snake_dir = std::bind(&snake::snake_move, &S, std::placeholders::_1);
+    auto change_snake_dir = std::bind(&snake::move, &S, std::placeholders::_1);
     auto quit_f = std::bind(&text_vi::stop_game, this);
     ctrl.setonkey(change_snake_dir, 'w');
     ctrl.setonkey(change_snake_dir, 'a');
     ctrl.setonkey(change_snake_dir, 's');
     ctrl.setonkey(change_snake_dir, 'd');
     ctrl.setonkey(quit_f, 'q');
-
 
     while (run_state)
     {
@@ -47,11 +46,26 @@ void text_vi::draw()
         update_sz();
         draw_frame();
         ctrl.poll_keyboard();
-        const std::list<point *> &temp = S.get_state();
-        draw_list(temp);
+        try
+        {
+            S.update_state();
+            draw_list(S.get_state(), 's'); // draw snake
+        }
+        catch (int exc)
+        {
+            if (exc == -1)
+            {
+                draw_list(S.get_state(), 'X');
+            }
+            stop_game();
+        }
         unsigned t2 = get_time();
 
-        usleep(1000000/2 - (t1 - t2));      //2 FPS
+        unsigned timeout = 1000000 / 2 - (t1 - t2);
+        if (timeout > 0)
+        {
+            usleep(1000000 / 2 - (t1 - t2)); // 2 FPS
+        }
     }
 }
 
@@ -137,16 +151,15 @@ text_vi::text_vi()
     tcsetattr(1, TCSANOW, &temp_terminal);
 }
 
-void text_vi::draw_list(const std::list<point *> &list)
+void text_vi::draw_list(const std::list<point *> &list, char d)
 {
     for (auto it = list.begin(); it != list.end(); ++it)
     {
-        put_xy(**it, 's');
+        put_xy(**it, d);
     }
 }
 
-text_vi::~text_vi() 
+text_vi::~text_vi()
 {
     tcsetattr(1, TCSANOW, &terminal_state);
-
 }

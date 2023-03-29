@@ -1,7 +1,7 @@
 #include <list>
 #include "./view.hh"
 
-const point direction_arr[4] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // up down left right
+const point direction_arr[5] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {0, 0}}; // up down left right 0
 
 class snake
 {
@@ -34,7 +34,7 @@ public:
         direction = d;
     }
 
-    const std::list<point *> &get_state()
+    void update_state()
     {
         point *last = points.back();
         points.pop_back();
@@ -48,10 +48,19 @@ public:
         points.push_front(temp);
         *temp += direction_arr[direction];
 
+        
+        if ((temp->x == size_x) || (temp->x == 0) || (temp->y == size_y) || (temp->y == 0))
+        {
+            throw -1;
+        }
+    }
+
+    const std::list<point *> &get_state()
+    {
         return points;
     }
 
-    void snake_move(char d)
+    void move(char d)
     {
         int dir = 0;
         switch (d)
@@ -78,3 +87,21 @@ public:
 };
 
 
+class rabbit
+{
+    public:
+
+    void move()
+    {
+
+    }
+
+    void change_direction(const int d)
+    {
+        direction = d;
+    }
+
+    private:
+
+    int direction = 0;
+};

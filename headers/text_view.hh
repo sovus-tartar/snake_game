@@ -23,7 +23,7 @@ private:
     void hline(int n, char c);
     void vline(int n, char c);
     void chcolor(int fg, int bg);
-    void draw_list(const std::list<point*> & list);
+    void draw_list(const std::list<point*> & list, char d);
     void draw_frame();
     void update_sz();
     void stop_game()
