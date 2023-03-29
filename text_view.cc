@@ -44,8 +44,10 @@ void text_vi::draw()
 
         clean();
         update_sz();
+        S.update_size(x, y);
         draw_frame();
         ctrl.poll_keyboard();
+
         try
         {
             S.update_state();
@@ -59,6 +61,7 @@ void text_vi::draw()
             }
             stop_game();
         }
+
         unsigned t2 = get_time();
 
         unsigned timeout = 1000000 / 2 - (t1 - t2);

@@ -3,11 +3,22 @@
 
 const point direction_arr[5] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {0, 0}}; // up down left right 0
 
-class snake
+struct character
+{
+    int size_x, size_y;
+
+    void update_size(int x, int y)
+    {
+        size_x = x, size_y = y;
+    }
+
+};
+
+class snake : public character
 {
 private:
     std::list<point *> points;
-    int size_x, size_y;
+    
     int direction = 2;
 
 public:
@@ -17,8 +28,9 @@ public:
             delete *it;
     }
 
-    snake(int n, int x, int y) : size_x(x), size_y(y)
+    snake(int n, int x, int y)
     {
+        update_size(x, y);
         int x_temp = x / 2;
         int y_temp = y / 2;
 
@@ -87,13 +99,19 @@ public:
 };
 
 
-class rabbit
+class rabbit : public character
 {
     public:
 
+    rabbit(int sz_x, int sz_y, int x_, int y_)
+    {
+        update_size(sz_x, sz_y);
+        position = {x_, y_};
+    }
+
     void move()
     {
-
+        position += direction_arr[direction];
     }
 
     void change_direction(const int d)
@@ -102,6 +120,23 @@ class rabbit
     }
 
     private:
+    struct point position;
+    int direction = 4;
+};
 
-    int direction = 0;
+
+class flock_rabbits : public character
+{
+    public:
+
+    flock_rabbits(int n_): n(n_)
+    {
+
+    }
+
+    private:
+
+    int n;
+    std::list<rabbit> rabbits;
+    
 };
