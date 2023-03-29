@@ -7,7 +7,7 @@
 #include <poll.h>
 #include <functional>
 
-class controller
+class keyboard_ctrl
 {
     using action = std::function<void (int)>;
 
@@ -40,7 +40,7 @@ private:
     }
 
 public:
-    controller() {};
+    keyboard_ctrl() {};
 
     void setonkey(action func, char c)
     {
@@ -78,7 +78,7 @@ public:
         return (time -= get_time());
     };
 
-    ~controller()
+    ~keyboard_ctrl()
     {
         for (auto it = used_button_list.begin(); it != used_button_list.end(); ++it)
             delete buttons.find(*it)->second;

@@ -29,5 +29,6 @@ private:
     void stop_game()
     {
         run_state = 0;
-    }
+    };
+    int get_time();
 };

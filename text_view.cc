@@ -2,6 +2,7 @@
 #include "./headers/model.hh"
 #include "./headers/controller.hh"
 #include <sys/ioctl.h>
+#include <sys/time.h>
 #include <functional>
 #include <iostream>
 #include <stdio.h>
@@ -12,13 +13,22 @@
 #include <unistd.h>
 #include <assert.h>
 
-//x вправо y вниз
+int text_vi::get_time()
+{
+    struct timeval tp;
+
+    gettimeofday(&tp, NULL);
+
+    return (tp.tv_sec * 1000000 + tp.tv_usec);
+};
+
+// x вправо y вниз
 void text_vi::draw()
 {
 
     std::cout << "Hello, it's text\n";
     snake S(10, x, y);
-    controller ctrl;
+    keyboard_ctrl ctrl;
 
     auto change_snake_dir = std::bind(&snake::snake_move, &S, std::placeholders::_1);
     auto quit_f = std::bind(&text_vi::stop_game, this);
@@ -28,23 +38,21 @@ void text_vi::draw()
     ctrl.setonkey(change_snake_dir, 'd');
     ctrl.setonkey(quit_f, 'q');
 
-    printf("x = %d y = %d \n", x, y);
-    sleep(1);
-    while(run_state)
+
+    while (run_state)
     {
-        
+        unsigned t1 = get_time();
+
         clean();
         update_sz();
         draw_frame();
-
         ctrl.poll_keyboard();
-        
-        const std::list<point*> &temp = S.get_state();
+        const std::list<point *> &temp = S.get_state();
         draw_list(temp);
-        
-        usleep(500000);
+        unsigned t2 = get_time();
+
+        usleep(1000000/2 - (t1 - t2));      //2 FPS
     }
-    
 }
 
 void text_vi::draw_frame()
@@ -84,7 +92,6 @@ void text_vi::put_xy(point p, char c)
     putchar(c);
     puts("\e[H");
 }
-
 
 void text_vi::vline(int n, char c)
 {
@@ -128,21 +135,15 @@ text_vi::text_vi()
 
     cfmakeraw(&temp_terminal);
     tcsetattr(1, TCSANOW, &temp_terminal);
-
-
 }
 
-void text_vi::draw_list(const std::list<point*> & list)
+void text_vi::draw_list(const std::list<point *> &list)
 {
-    for(auto it = list.begin(); it != list.end(); ++it)
+    for (auto it = list.begin(); it != list.end(); ++it)
     {
         put_xy(**it, 's');
     }
-
-    
 }
-
-
 
 text_vi::~text_vi()
 {
