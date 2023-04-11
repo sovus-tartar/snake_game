@@ -46,15 +46,18 @@ void text_vi::draw()
         clean();
         update_sz();
         S.update_size(x, y);
+        R.update_size(x, y);
         draw_frame();
         ctrl.poll_keyboard();
-        draw_list(R.get_state(), 'r');
+        
+        
 
         point collide_point;
 
         try
         {
             S.update_state();
+            draw_list(S.get_state(), 's'); // draw snake
             S.check_for_rabbits(R.get_state());
             
         }
@@ -68,11 +71,12 @@ void text_vi::draw()
             else
             {
                 R.kill(exc);
+                draw_list(S.get_state(), 's'); // draw snake
             }
         }
 
-        draw_list(S.get_state(), 's'); // draw snake
-
+        draw_list(R.get_state(), 'r');
+        R.update_state(S.get_head());
         unsigned t2 = get_time();
 
         unsigned timeout = 1000000 / 2 - (t1 - t2);

@@ -44,6 +44,11 @@ public:
     {
     }
 
+    point get_head()
+    {
+        return points.front();
+    }
+
     void check_for_rabbits(const std::list<point> rabbits)
     {
         int collision = 0;
@@ -144,8 +149,31 @@ public:
         direction = d;
     }
 
+    void update_state(point snake_head)
+    {
+        point vect = (*this) - snake_head;
+        
+        direction = std::rand() % 5;
+
+        if(possible_move())
+            (*this) += direction_arr[direction];
+    }
+
 private:
     int direction = 4;
+
+    int possible_move()
+    {
+
+        point temp = *this + direction_arr[direction];
+
+        if ((temp.x > 0) && (temp.x < size_x) && (temp.y > 0) && (temp.y < size_y)) 
+            return 1;
+
+        return 0;
+    }
+
+
 };
 
 class flock_rabbits : public character
@@ -165,6 +193,12 @@ public:
 
             rabbits.push_front(temp);
         }
+    }
+
+    void update_state(point snake_head)
+    {
+        for(auto it = rabbits.begin(); it != rabbits.end(); ++it)
+            it->update_state(snake_head);
     }
 
     const std::list<point> get_state()
