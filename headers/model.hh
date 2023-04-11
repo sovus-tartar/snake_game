@@ -18,20 +18,20 @@ struct character
 class snake : public character
 {
 private:
-    std::list<point *> points;
+    std::list<point> points;
 
     int direction = 2;
 
     int check_for_intersection()
     {
-        point head = *points.front();
+        point head = points.front();
 
         auto it = points.begin();
         ++it;
 
         for (it; it != points.end(); ++it)
         {
-            if (head == (**it))
+            if (head == (*it))
                 return 1;
         }
 
@@ -41,8 +41,26 @@ private:
 public:
     ~snake()
     {
-        for (auto it = points.begin(); it != points.end(); ++it)
-            delete *it;
+    }
+
+    void check_for_rabbits(const std::list<point> rabbits)
+    {
+        int collision = 0;
+        for(auto it = rabbits.begin(); it != rabbits.end(); ++it)
+        {
+            if (*it == points.front())
+            {
+                
+                collision = 1;
+            }
+                
+        }
+
+        if (collision == 0)
+        {
+
+            points.pop_back();
+        }
     }
 
     snake(int n, int x, int y)
@@ -51,10 +69,11 @@ public:
         int x_temp = x / 2;
         int y_temp = y / 2;
 
+        
+
         for (int i = 0; i < n; ++i)
         {
-            point *temp_point = new point(x_temp + i, y_temp);
-            points.push_front(temp_point);
+            points.emplace_front(point(x_temp + i, y_temp));
         }
     };
 
@@ -65,24 +84,18 @@ public:
 
     void update_state()
     {
-        point *last = points.back();
-        points.pop_back();
-        delete last;
+        point temp = points.front() + direction_arr[direction];
 
-        point *prev = points.front();
-        point *temp = new point;
-
-        *temp = *prev;
         points.push_front(temp);
-        *temp += direction_arr[direction];
 
-        if ((temp->x == size_x) || (temp->x == 0) || (temp->y == size_y) || (temp->y == 0) || check_for_intersection())
+
+        if ((temp.x == size_x) || (temp.x == 0) || (temp.y == size_y) || (temp.y == 0) || check_for_intersection())
         {
             throw -1;
         }
     }
 
-    const std::list<point *> &get_state()
+    const std::list<point> &get_state()
     {
         return points;
     }
@@ -151,22 +164,21 @@ public:
         {
             int x_rand = 1 + std::rand() % (size_x - 1);
             int y_rand = 1 + std::rand() % (size_y - 1);
-            rabbit *temp = new rabbit(size_x, size_y, x_rand, y_rand);
+            rabbit temp(size_x, size_y, x_rand, y_rand);
 
             rabbits.push_front(temp);
 
         }
     }
 
-    const std::list<point *> get_state()
+    const std::list<point> get_state()
     {
-        std::list<point *> rabbits_list;
-        for(auto it = rabbits.begin(); it != rabbits.end(); ++it)
-        {
-            rabbits_list.push_back(*it);
-        }
+        std::list<point> temp;
 
-        return rabbits_list;
+        for(auto it = rabbits.begin(); it != rabbits.end(); ++it)
+            temp.emplace_back(*it);
+        
+        return temp;
     }
 
     int collide(int x_, int y_)
@@ -176,7 +188,7 @@ public:
         auto it = rabbits.begin();
         for(it = rabbits.begin(); it != rabbits.end(); ++it)
         {
-            if (**it == temp)
+            if (*it == temp)
                 break;
         }
 
@@ -189,6 +201,6 @@ public:
 
 private:
     int n;
-    std::list<rabbit *> rabbits;
+    std::list<rabbit> rabbits;
 
 };

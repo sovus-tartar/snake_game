@@ -53,6 +53,7 @@ void text_vi::draw()
         try
         {
             S.update_state();
+            S.check_for_rabbits(R.get_state());
             draw_list(S.get_state(), 's'); // draw snake
         }
         catch (int exc)
@@ -63,6 +64,8 @@ void text_vi::draw()
             }
             stop_game();
         }
+
+
 
         unsigned t2 = get_time();
 
@@ -161,11 +164,11 @@ text_vi::text_vi()
     tcsetattr(1, TCSANOW, &temp_terminal);
 }
 
-void text_vi::draw_list(const std::list<point *> &list, char d)
+void text_vi::draw_list(const std::list<point> &list, char d)
 {
     for (auto it = list.begin(); it != list.end(); ++it)
     {
-        put_xy(**it, d);
+        put_xy(*it, d);
     }
 }
 
