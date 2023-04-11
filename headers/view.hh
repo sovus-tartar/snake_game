@@ -15,7 +15,27 @@ struct point
 
         return *this;
     };
+
+    point operator=(const point& p2)
+    {
+        x = p2.x;
+        y = p2.y;
+        
+        return *this;
+    };
+
+    int operator==(const point &p2) const
+    {
+        if((x == p2.x) && (y == p2.y))
+            return 1;
+
+        return 0;
+    }
+
+
 };
+
+
 
 class view
 {

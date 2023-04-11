@@ -29,6 +29,7 @@ void text_vi::draw()
     std::cout << "Hello, it's text\n";
     snake S(10, x, y);
     keyboard_ctrl ctrl;
+    flock_rabbits R (20, x, y);
 
     auto change_snake_dir = std::bind(&snake::move, &S, std::placeholders::_1);
     auto quit_f = std::bind(&text_vi::stop_game, this);
@@ -47,6 +48,7 @@ void text_vi::draw()
         S.update_size(x, y);
         draw_frame();
         ctrl.poll_keyboard();
+        draw_list(R.get_state(), 'r');
 
         try
         {
@@ -68,6 +70,11 @@ void text_vi::draw()
         if (timeout > 0)
         {
             usleep(1000000 / 2 - (t1 - t2)); // 2 FPS
+        }
+        else
+        {
+            std::cout << "Low perfomance, exiting...\n";
+            exit(0);
         }
     }
 }
