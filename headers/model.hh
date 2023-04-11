@@ -1,6 +1,7 @@
 #include <list>
 #include <algorithm>
 #include <unordered_map>
+#include <algorithm>
 #include "./view.hh"
 
 const point direction_arr[5] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {0, 0}}; // up down left right 0
@@ -46,21 +47,20 @@ public:
     void check_for_rabbits(const std::list<point> rabbits)
     {
         int collision = 0;
-        for(auto it = rabbits.begin(); it != rabbits.end(); ++it)
+        for (auto it = rabbits.begin(); it != rabbits.end(); ++it)
         {
             if (*it == points.front())
             {
-                
                 collision = 1;
             }
-                
         }
 
         if (collision == 0)
         {
-
             points.pop_back();
         }
+        if (collision == 1)
+            throw points.front();
     }
 
     snake(int n, int x, int y)
@@ -68,8 +68,6 @@ public:
         update_size(x, y);
         int x_temp = x / 2;
         int y_temp = y / 2;
-
-        
 
         for (int i = 0; i < n; ++i)
         {
@@ -88,10 +86,9 @@ public:
 
         points.push_front(temp);
 
-
         if ((temp.x == size_x) || (temp.x == 0) || (temp.y == size_y) || (temp.y == 0) || check_for_intersection())
         {
-            throw -1;
+            throw point(-1, -1);
         }
     }
 
@@ -167,7 +164,6 @@ public:
             rabbit temp(size_x, size_y, x_rand, y_rand);
 
             rabbits.push_front(temp);
-
         }
     }
 
@@ -175,10 +171,15 @@ public:
     {
         std::list<point> temp;
 
-        for(auto it = rabbits.begin(); it != rabbits.end(); ++it)
+        for (auto it = rabbits.begin(); it != rabbits.end(); ++it)
             temp.emplace_back(*it);
-        
+
         return temp;
+    }
+
+    void kill(const point& rabbit)
+    {
+        rabbits.erase(std::find(rabbits.begin(), rabbits.end(), rabbit));
     }
 
     int collide(int x_, int y_)
@@ -186,7 +187,7 @@ public:
         point temp = {x_, y_};
 
         auto it = rabbits.begin();
-        for(it = rabbits.begin(); it != rabbits.end(); ++it)
+        for (it = rabbits.begin(); it != rabbits.end(); ++it)
         {
             if (*it == temp)
                 break;
@@ -202,5 +203,4 @@ public:
 private:
     int n;
     std::list<rabbit> rabbits;
-
 };

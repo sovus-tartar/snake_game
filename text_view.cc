@@ -50,22 +50,28 @@ void text_vi::draw()
         ctrl.poll_keyboard();
         draw_list(R.get_state(), 'r');
 
+        point collide_point;
+
         try
         {
             S.update_state();
             S.check_for_rabbits(R.get_state());
-            draw_list(S.get_state(), 's'); // draw snake
+            
         }
-        catch (int exc)
+        catch (point exc)
         {
-            if (exc == -1)
+            if (exc == point(-1, -1))
             {
                 draw_list(S.get_state(), 'X');
+                stop_game();
             }
-            stop_game();
+            else
+            {
+                R.kill(exc);
+            }
         }
 
-
+        draw_list(S.get_state(), 's'); // draw snake
 
         unsigned t2 = get_time();
 
