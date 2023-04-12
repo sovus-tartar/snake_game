@@ -33,6 +33,7 @@ void text_vi::draw()
 
     auto change_snake_dir = std::bind(&snake::move, &S, std::placeholders::_1);
     auto quit_f = std::bind(&text_vi::stop_game, this);
+    
     ctrl.setonkey(change_snake_dir, 'w');
     ctrl.setonkey(change_snake_dir, 'a');
     ctrl.setonkey(change_snake_dir, 's');
@@ -77,6 +78,7 @@ void text_vi::draw()
 
         draw_list(R.get_state(), 'r');
         R.update_state(S.get_head());
+
         unsigned t2 = get_time();
 
         unsigned timeout = 1000000 / 2 - (t1 - t2);
